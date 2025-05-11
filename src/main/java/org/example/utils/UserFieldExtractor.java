@@ -1,5 +1,6 @@
-package org.example;
+package org.example.utils;
 
+import org.example.model.User;
 import org.springframework.batch.item.file.transform.FieldExtractor;
 
 /**

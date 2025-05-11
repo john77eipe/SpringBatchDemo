@@ -1,5 +1,6 @@
-package org.example;
+package org.example.batch.service;
 
+import org.example.config.BatchConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.*;
@@ -7,7 +8,6 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -55,7 +55,7 @@ public class JobStarter implements CommandLineRunner {
 
             // Create job with the custom parameters
             Job exportJob = batchConfig.exportJob(
-                    jobRepository, 
+                    jobRepository,
                     listener, 
                     whereClause, 
                     filename);

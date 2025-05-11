@@ -1,5 +1,6 @@
-package org.example;
+package org.example.controller;
 
+import org.example.batch.service.JobStarter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobExecution;

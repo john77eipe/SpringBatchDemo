@@ -1,5 +1,9 @@
-package org.example;
+package org.example.config;
 
+import org.example.batch.properties.BatchProperties;
+import org.example.model.User;
+import org.example.utils.UserFieldExtractor;
+import org.example.utils.UserRowMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.*;
@@ -177,7 +181,7 @@ public class BatchConfig {
         extends JobExecutionListenerSupport {
         
         private final PlatformTransactionManager transactionManager;
-        
+
         /**
          * Creates a new listener with the given transaction manager.
          * 
@@ -186,7 +190,7 @@ public class BatchConfig {
         public JobCompletionNotificationListener(PlatformTransactionManager transactionManager) {
             this.transactionManager = transactionManager;
         }
-        
+
         /**
          * Provides access to the transaction manager for the step configuration.
          * 
@@ -226,7 +230,7 @@ public class BatchConfig {
                 log.error("Job failed with exceptions:");
                 jobExecution.getAllFailureExceptions()
                     .forEach(ex -> log.error(" ", ex));
-            }
         }
+    }
     }
 }

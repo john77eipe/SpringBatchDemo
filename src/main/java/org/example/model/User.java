@@ -1,4 +1,4 @@
-package org.example;
+package org.example.model;
 
 /**
  * Data model class representing a user entity in the database.
