@@ -28,6 +28,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -84,12 +85,6 @@ public class BatchConfig {
                 .build();
     }
 
-    /**
-     * Creates a FlatFileItemWriter for writing User records to a CSV file.
-     * 
-     * @param filename The name of the output file (or null to generate one)
-     * @return A configured FlatFileItemWriter instance
-     */
     @Bean
     @Scope("prototype")
     public FlatFileItemWriter<User> writer(@Value("#{null}") String filename) {
@@ -98,7 +93,14 @@ public class BatchConfig {
         if (dir == null || dir.isBlank()) {
             dir = "target";
         }
-        new File(dir).mkdirs();
+        
+        File directory = new File(dir);
+        if (!directory.exists()) {
+            boolean created = directory.mkdirs();
+            if (!created) {
+                throw new IllegalStateException("Failed to create output directory: " + dir);
+            }
+        }
         
         // Generate filename with timestamp if none provided
         if (filename == null || filename.isEmpty()) {
@@ -107,10 +109,26 @@ public class BatchConfig {
             filename = pattern.replace("{timestamp}", ts);
         }
 
+        File outputFile = new File(directory, filename);
+        // Ensure the file is writable or can be created
+        try {
+            if (!outputFile.exists()) {
+                boolean created = outputFile.createNewFile();
+                if (!created) {
+                    throw new IllegalStateException("Failed to create output file: " + outputFile);
+                }
+            }
+            if (!outputFile.canWrite()) {
+                throw new IllegalStateException("Output file is not writable: " + outputFile);
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("Error preparing output file: " + outputFile, e);
+        }
+
         // Build and return the writer
         return new FlatFileItemWriterBuilder<User>()
                 .name("userWriter")
-                .resource(new FileSystemResource(new File(dir, filename)))
+                .resource(new FileSystemResource(outputFile))
                 .delimited()
                 .delimiter("\t")
                 .fieldExtractor(new UserFieldExtractor())
