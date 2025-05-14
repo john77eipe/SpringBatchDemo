@@ -69,8 +69,9 @@ public class BatchConfig {
         // Create and configure the query provider
         SqlPagingQueryProviderFactoryBean queryProvider = new SqlPagingQueryProviderFactoryBean();
         queryProvider.setDataSource(dataSource);
-        queryProvider.setSelectClause(props.getBaseQuery().split("FROM")[0].trim());
-        queryProvider.setFromClause("FROM user");
+        queryProvider.setSelectClause(props.getBaseQuery().split("(?i)FROM")[0].trim());
+        queryProvider.setFromClause(props.extractFromClause());
+
         queryProvider.setWhereClause(whereClause != null && !whereClause.isEmpty() ? 
                 whereClause : props.getDefaultWhereClause());
         queryProvider.setSortKeys(sortKeys);

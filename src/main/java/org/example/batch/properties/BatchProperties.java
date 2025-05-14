@@ -20,10 +20,10 @@ public class BatchProperties {
     private Output output = new Output();
     
     /** Base SQL query used for data export (SELECT clause) */
-    private String baseQuery = "SELECT id, name FROM user";
+    private String baseQuery = "";
     
     /** Default WHERE clause to use if none is provided */
-    private String defaultWhereClause = "WHERE id is not null";
+    private String defaultWhereClause = "";
 
     /**
      * Gets the chunk size for batch processing
@@ -85,6 +85,41 @@ public class BatchProperties {
      */
     public void setDefaultWhereClause(String defaultWhereClause) { 
         this.defaultWhereClause = defaultWhereClause; 
+    }
+
+    /**
+     * Extracts the FROM clause from the base query.
+     * Handles cases with or without WHERE, GROUP BY, ORDER BY clauses.
+     *
+     * @return The FROM clause including the FROM keyword and table specification
+     * @throws IllegalStateException if the base query doesn't contain a valid FROM clause
+     */
+    public String extractFromClause() {
+        if (baseQuery == null || baseQuery.isEmpty()) {
+            throw new IllegalStateException("Base query cannot be null or empty");
+        }
+
+        // Find the FROM keyword position (case-insensitive)
+        int fromIndex = baseQuery.toLowerCase().indexOf(" from ");
+        if (fromIndex == -1) {
+            throw new IllegalStateException("Base query must contain FROM clause");
+        }
+
+        // Find the first occurrence of a clause that might come after FROM
+        String afterFrom = baseQuery.substring(fromIndex + 6);
+        String[] endKeywords = {" where ", " group by ", " having ", " order by ", " limit "};
+
+        int endIndex = afterFrom.length();
+        for (String keyword : endKeywords) {
+            int idx = afterFrom.toLowerCase().indexOf(keyword);
+            if (idx != -1 && idx < endIndex) {
+                endIndex = idx;
+            }
+        }
+
+        // Extract and clean the FROM clause
+        String fromClause = afterFrom.substring(0, endIndex).trim();
+        return "FROM " + fromClause;
     }
 
     /**
