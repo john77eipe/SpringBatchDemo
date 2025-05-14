@@ -125,15 +125,17 @@ public class BatchConfig {
         } catch (IOException e) {
             throw new IllegalStateException("Error preparing output file: " + outputFile, e);
         }
+        UserFieldExtractor fieldExtractor = new UserFieldExtractor();
+        String delimiter = "\t";
 
         // Build and return the writer
         return new FlatFileItemWriterBuilder<User>()
                 .name("userWriter")
                 .resource(new FileSystemResource(outputFile))
                 .delimited()
-                .delimiter("\t")
+                .delimiter(delimiter)
                 .fieldExtractor(new UserFieldExtractor())
-                .headerCallback(writer -> writer.write("id\tname"))
+                .headerCallback(writer -> writer.write(fieldExtractor.getHeaderLine(delimiter)))
                 .build();
     }
 

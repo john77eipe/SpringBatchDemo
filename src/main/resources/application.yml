@@ -13,7 +13,7 @@ spring:
 
 batch:
   # 1) Base query settings
-  base-query: SELECT id, name FROM user
+  base-query: SELECT id, name, email FROM user
   default-where-clause: WHERE id is not null
   
   # 2) How many rows per transaction/page

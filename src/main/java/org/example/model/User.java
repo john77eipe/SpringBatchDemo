@@ -12,6 +12,8 @@ public class User {
     /** The name of the user */
     private String name;
 
+    private String email;
+
     /**
      * Default no-args constructor required for bean instantiation
      */
@@ -27,6 +29,14 @@ public class User {
     public User(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**
