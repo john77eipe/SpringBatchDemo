@@ -45,8 +45,12 @@ public class BatchConfig {
 
     private static final Logger log = LoggerFactory.getLogger(BatchConfig.class);
 
-    @Autowired
-    private DataSource dataSource;
+    private final DataSource dataSource;
+
+    public BatchConfig(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
 
     @Autowired
     private BatchProperties props;
