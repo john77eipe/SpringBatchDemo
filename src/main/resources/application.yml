@@ -1,9 +1,9 @@
 spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/testdb
-    username: root
-    password: administrator
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/testdb
+#    username: root
+#    password: administrator
+#    driver-class-name: com.mysql.cj.jdbc.Driver
   batch:
     jdbc:
       initialize-schema: always
@@ -28,3 +28,9 @@ batch:
     filename-pattern: export-{timestamp}.txt
     # include the header row (column names) if true
     include-header: true
+
+azure:
+  vaulturl: <url>
+  clientid: <clientid>
+  tenantid: <tenantid>
+  clientsecret: <clientsecret>
